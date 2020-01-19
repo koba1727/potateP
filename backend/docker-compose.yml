@@ -8,6 +8,7 @@ services:
       dockerfile: docker/go/Dockerfile
     volumes:
       - ././:/app
+    tty: true
   nginx:
     image: nginx
     container_name: nginx
