@@ -33,3 +33,5 @@ RUN apk --no-cache update && \
 #     golang.org/x/lint/golint \
 #     golang.org/x/tools/cmd/goimports \
 #     github.com/PuerkitoBio/goquery
+
+CMD ["/bin/bash"]
