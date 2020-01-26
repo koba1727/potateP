@@ -1,6 +1,6 @@
 import * as React from "react";
-import Login from "./containers/Login";
-import About from "./containers/About";
+import Login from "./features/login/containers/login";
+import Home from "./features/home/containers/home";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import {
   Navbar,
@@ -12,16 +12,25 @@ import {
   DropdownMenu,
   NavLink
 } from "reactstrap";
+import SignUp from "./features/signup/containers/signup";
+import Auth from "./Auth";
 
 class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
         <div className="App">
-          <Menu />
           <Switch>
             <Route exact path={"/"} component={Login} />
-            <Route path={"/about"} component={About} />
+            <Route path={"/signup"} component={SignUp} />
+            <Auth>
+              <Switch>
+                <div>
+                  <Menu />
+                  <Route path={"/home"} component={Home} />
+                </div>
+              </Switch>
+            </Auth>
           </Switch>
         </div>
       </BrowserRouter>
