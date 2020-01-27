@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import firebase from "../../../FireBase";
 import { AppState } from "../../../store";
 import { userActions } from "../containers/login";
+import { Link } from "react-router-dom";
 interface OwnProps {}
 
 type LoginProps = OwnProps & userActions & AppState & RouteComponentProps;
@@ -32,10 +33,30 @@ export class Login extends React.Component<LoginProps, OwnState> {
       .auth()
       .signInWithEmailAndPassword(values.email, values.password)
       .then(res => {
+        console.log(res);
         this.props.setUser({
           email: values.email,
           isLogin: true,
-          uid: ""
+          uid: res.user?.uid || ""
+        });
+        this.props.history.push("/home");
+      })
+      .catch(error => {
+        console.log(error);
+        alert(error);
+      });
+  };
+  handleGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(res => {
+        console.log(res);
+        this.props.setUser({
+          email: res.user?.email || "",
+          isLogin: true,
+          uid: res.user?.uid || ""
         });
         this.props.history.push("/home");
       })
@@ -101,9 +122,18 @@ export class Login extends React.Component<LoginProps, OwnState> {
               <Row>
                 <Col md={{ size: 6, offset: 3 }}>
                   <div style={{ textAlign: "center" }}>
-                    <Button color="success" type="submit" disabled={false}>
-                      ログイン
-                    </Button>
+                    <Row>
+                      <Col md={{ size: 6 }}>
+                        <Button color="success" type="submit" disabled={false}>
+                          ログイン
+                        </Button>
+                      </Col>
+                      <Col md={{ size: 6 }}>
+                        <Link to="/signin">新規登録</Link>
+                      </Col>
+                    </Row>
+                    <p>or</p>
+                    <Button onClick={this.handleGoogle}>Googleログイン</Button>
                   </div>
                 </Col>
               </Row>
