@@ -129,7 +129,7 @@ export class Login extends React.Component<LoginProps, OwnState> {
                         </Button>
                       </Col>
                       <Col md={{ size: 6 }}>
-                        <Link to="/signin">新規登録</Link>
+                        <Link to="/signup">新規登録</Link>
                       </Col>
                     </Row>
                     <p>or</p>
