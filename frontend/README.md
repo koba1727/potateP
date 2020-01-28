@@ -1,3 +1,13 @@
+# ログインの環境構築
+
+## firebase(ざっくり)
+
+1.firebase にログイン<br /> 2.プロジェクトを作成<br />
+3.authentication を追加<br /> 4.パスワード認証と google 認証を有効にする<br /> 5.プロジェクトの overview の「開始するにはアプリを追加してください」の中からウェブを選ぶ<br /> 6.進めていくと web アプリからファイルベース使うのに必要な情報が表示されるのでどこかに控える<br />
+7./frontend/.env にその情報を書く（.env_template を書き換える形で<br />
+
+以上
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
