@@ -4,29 +4,33 @@ services:
     image: go
     container_name: go
     build:
-      context: ./
-      dockerfile: docker/go/Dockerfile
+      context: ./backend/docker/go
+      dockerfile: Dockerfile
+      args: 
+        APP_ROOT: /app
     volumes:
-      - ././:/app
-    tty: true
-  nginx:
-    image: nginx
-    container_name: nginx
+      - ./backend/src:/app
+    ports:
+      - 3000:3000
+    command: bash -c "cd /app && realize start --server"
+  nginx_back:
+    depends_on:
+      - go
+    image: nginx_back
+    container_name: nginx_back
     build:
-      context: ./
-      dockerfile: docker/nginx/Dockerfile
+      context: ./backend/docker/nginx_back
+      dockerfile: Dockerfile
     depends_on:
       - go
     ports:
-      - 80:80
-    links:
-      - go
+      - 8080:80
   mysql:
     image: mysql
     container_name: mysql
     build:
-      context: ./
-      dockerfile: docker/mysql/Dockerfile
+      context: ./backend/docker/mysql
+      dockerfile: Dockerfile
     ports:
       - 3306:3306
     environment:
@@ -38,7 +42,38 @@ services:
     image: gocli
     container_name: gocli
     build:
-      context: ./
-      dockerfile: docker/gocli/Dockerfile
+      context: ./backend/docker/gocli
+      dockerfile: Dockerfile
     volumes:
       - ./:/app
+  node:
+    image: node
+    container_name: node
+    build:
+      context: ./frontend/docker/node
+      dockerfile: Dockerfile
+      args:
+        APP_ROOT: "/src"
+    volumes:
+      - ./frontend:/src
+    tty: true
+  yarn:
+    image: yarn
+    container_name: yarn
+    build:
+      context: ./frontend/docker/yarn
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/src
+  nginx_front:
+    image: nginx_front
+    container_name: nginx_front
+    build:
+      context: ./frontend/docker/nginx_front
+      dockerfile: Dockerfile
+    depends_on:
+      - node
+    ports:
+      - 80:80
+    volumes:
+      - ./frontend/build:/var/www/html

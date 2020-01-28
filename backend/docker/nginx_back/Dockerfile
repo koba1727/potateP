@@ -6,4 +6,5 @@ RUN apk --no-cache update \
   && mkdir -p /var/www/app/public \
   && chmod 755 -R /var/www/app
 
-# COPY docker/nginx/etc/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./etc/nginx/nginx.conf /etc/nginx/nginx.conf
+# COPY ./etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf

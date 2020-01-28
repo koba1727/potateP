@@ -1,6 +1,9 @@
 FROM golang:alpine3.10
 
-WORKDIR /app
+ARG APP_ROOT
+
+RUN mkdir ${APP_ROOT}
+WORKDIR ${APP_ROOT}
 
 RUN apk --no-cache update && \
     apk --no-cache upgrade && \
@@ -13,6 +16,9 @@ RUN apk --no-cache update && \
     openssl \
     bash \
     git
+
+RUN go get -u github.com/oxequa/realize && \
+    go get -u github.com/gorilla/mux
 
 # RUN go get -u \
 #     github.com/golang/dep/cmd/dep \
@@ -34,4 +40,4 @@ RUN apk --no-cache update && \
 #     golang.org/x/tools/cmd/goimports \
 #     github.com/PuerkitoBio/goquery
 
-CMD ["/bin/bash"]
+# CMD ["go", "run", "main.go"]
