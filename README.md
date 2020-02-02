@@ -41,3 +41,17 @@ or
 $ docker-compsoe run --rm yarn build
 ```
 
+# その他
+yarn コマンドを使いたいとき（例）
+```
+$ docker-compose run --rm yarn version
+yarn version v1.19.1
+info Current version: 0.1.0
+```
+
+go コマンドを使いたいとき（例）
+```
+$ docker-compose run --rm gocli go version
+go version go1.13.3 linux/amd64
+```
+
