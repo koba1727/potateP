@@ -40,4 +40,4 @@ RUN go get -u github.com/oxequa/realize && \
 #     golang.org/x/tools/cmd/goimports \
 #     github.com/PuerkitoBio/goquery
 
-# CMD ["go", "run", "main.go"]
+CMD ["realize", "start", "--server"]
