@@ -1,7 +1,7 @@
 #
 # node and build files step
 #
-FROM web
+FROM node
 
 ENTRYPOINT [ "yarn" ]
 CMD ["-v"]
