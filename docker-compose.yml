@@ -12,7 +12,6 @@ services:
       - ./backend/src:/app
     ports:
       - 3000:3000
-    # command: bash -c "cd /app && realize start --server"
   nginx_back:
     depends_on:
       - go
