@@ -1,7 +1,7 @@
 # potateP
 temporary project name "potate"
 
-# Development
+## Getting Started
 ```
 $ cd /path/to/dir
 ```
@@ -30,10 +30,17 @@ node          docker-entrypoint.sh /bin/sh     Up
 yarn          yarn -v                          Exit 0
 ```
 
+## Development
+env のコピーを作成し、各自設定すること
+```
+$ copy ./frontend/.env_template ./frontend/.env
+```
+
 フロントエンド用: パッケージインストール
 ```
 $ docker-compose run --rm yarn install
 ```
+
 フロントエンド用: ビルド
 ```
 $ docker-compose run --rm yarn start
@@ -41,7 +48,7 @@ or
 $ docker-compsoe run --rm yarn build
 ```
 
-# その他
+## Others
 yarn コマンドを使いたいとき（例）
 ```
 $ docker-compose run --rm yarn version
