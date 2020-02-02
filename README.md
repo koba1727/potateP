@@ -2,10 +2,8 @@
 temporary project name "potate"
 
 # Development
-
-## Backend
 ```
-$ cd backend
+$ cd /path/to/dir
 ```
 
 Docker ビルド（初回、Dockerfile 更新時のみ）
@@ -15,29 +13,45 @@ $ docker-compose build
 
 コンテナ起動
 ```
-$ docker-compose up -d
+$ docker-compose up
 ```
 
 確認
 ```
 $ docker-compose ps
-Name              Command             State                  Ports
------------------------------------------------------------------------
-go      /bin/sh                       Up
-gocli   /bin/bash                     Exit 0
-mysql   docker-entrypoint.sh mysqld   Up       0.0.0.0:3306->3306/tcp, 33060/tcp
-nginx   nginx -g daemon off;          Up       0.0.0.0:80->80/tcp
+   Name                  Command               State                  Ports
+-----------------------------------------------------------------------------------------
+go            bash -c cd /app && realize ...   Up       0.0.0.0:3000->3000/tcp
+gocli         /bin/bash                        Exit 0
+mysql         docker-entrypoint.sh mysqld      Up       0.0.0.0:3306->3306/tcp, 33060/tcp
+nginx_back    nginx -g daemon off;             Up       0.0.0.0:8080->80/tcp
+nginx_front   nginx -g daemon off;             Up       0.0.0.0:80->80/tcp
+node          docker-entrypoint.sh /bin/sh     Up
+yarn          yarn -v                          Exit 0
 ```
 
-### memo
-環境構築がまだ済んでいない。とりあえず go の開発は以下の手順
+フロントエンド用: パッケージインストール
+```
+$ docker-compose run --rm yarn install
+```
+フロントエンド用: ビルド
+```
+$ docker-compose run --rm yarn start
+or
+$ docker-compsoe run --rm yarn build
+```
 
-1. go コンテナに突入
+# その他
+yarn コマンドを使いたいとき（例）
 ```
-$ docker-compose exec go /bin/bash
+$ docker-compose run --rm yarn version
+yarn version v1.19.1
+info Current version: 0.1.0
 ```
-2. /app/src に移動（ローカルの `backend` がコンテナの `app` にマウントされてる）
+
+go コマンドを使いたいとき（例）
 ```
-bash-5.0# cd /app/src/
+$ docker-compose run --rm gocli go version
+go version go1.13.3 linux/amd64
 ```
 
