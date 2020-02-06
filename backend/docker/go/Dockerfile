@@ -18,7 +18,8 @@ RUN apk --no-cache update && \
     git
 
 RUN go get -u github.com/oxequa/realize && \
-    go get -u github.com/gorilla/mux
+    go get -u github.com/gorilla/mux && \
+    go get firebase.google.com/go
 
 # RUN go get -u \
 #     github.com/golang/dep/cmd/dep \
