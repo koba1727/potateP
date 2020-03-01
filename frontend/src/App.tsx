@@ -7,6 +7,7 @@ import SignUp from "./features/signup/containers/signup";
 import NavigationBar from "./features/navigataionBar/components/navigationBar";
 import EventList from "./features/event/containers/eventList";
 import EventOverview from "./features/event/containers/event_overview";
+import schedule from "./features/event/containers/schedule";
 
 class App extends React.Component {
   render() {
@@ -22,7 +23,11 @@ class App extends React.Component {
                   <NavigationBar />
                   <Route path={"/home"} component={Home} />
                   <Route exact path={"/events"} component={EventList} />
-                  <Route path="/events/:eid" component={EventOverview} />
+                  <Route exact path="/events/:eid" component={EventOverview} />
+                  <Route
+                    path="/events/:eid/schedule/:sid"
+                    component={schedule}
+                  />
                 </div>
               </Switch>
             </Auth>

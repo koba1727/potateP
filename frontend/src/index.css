@@ -15,3 +15,16 @@ code {
 .nav-item a.active {
   border-bottom: 2px solid red;
 }
+
+.nav-link {
+  text-decoration: none;
+  color: black;
+}
+.navbar-brand {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover {
+  border-bottom: 1px solid;
+}

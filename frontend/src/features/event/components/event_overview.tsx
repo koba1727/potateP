@@ -11,8 +11,7 @@ export class EventOverview extends React.Component<
     console.log(params);
     return (
       <WithEventSideBar eid={params.eid}>
-        <Container>event overview</Container>
-        <div style={{ marginBottom: "2000px" }}>sita</div>
+        <Container>event overviewaaa12 console.warn();</Container>
       </WithEventSideBar>
     );
   }
