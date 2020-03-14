@@ -86,6 +86,26 @@ func InitializeFireBase(ctx context.Context)(*firebase.App, error){
     return app, nil
 
 }
+
+func verifyIDToken(ctx context.Context, app *firebase.App, idToken string) *auth.Token {
+	// [START verify_id_token_golang]
+	client, err := app.Auth(ctx)
+	if err != nil {
+		log.Fatalf("error getting Auth client: %v\n", err)
+	}
+
+	token, err := client.VerifyIDToken(ctx, idToken)
+	if err != nil {
+		log.Fatalf("error verifying ID token: %v\n", err)
+	}
+
+	log.Printf("Verified ID token: %v\n", token)
+	// [END verify_id_token_golang]
+
+	return token
+}
+
+
 func hello(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte("hello!"))
 }
@@ -96,11 +116,11 @@ func main() {
 
     // test for firebase
     // initialize
-    // ctx := context.Background()
-    // app, err := InitializeFireBase(ctx)
-    // if err != nil{
-    //     log.Fatalln(err)
-    // }
+    ctx := context.Background()
+    app, err := InitializeFireBase(ctx)
+    if err != nil{
+        log.Fatalln(err)
+    }
 
     // firestore example
     // client, err := app.Firestore(ctx)
@@ -131,10 +151,16 @@ func main() {
     // }
 
     // auth example
+    verifyIDToken(ctx, app, "idToken")
     // client, err := app.Auth(ctx)
     // if err != nil {
     //     log.Fatalf("error getting Auth client: %v\n", err)
     // }
+    // token, err := client.VerifyIDToken(ctx, idToken)
+    // if err != nil {
+    //     log.Fatalf("error verifying ID token: %v\n", err)
+    // }
+    // log.Printf("Verified ID token: %v\n", token)
     // createUser(ctx, client)
 
 
