@@ -5,6 +5,7 @@ import (
     "fmt"
     "net/http"
     "log"
+    "strings"
 	
     //"github.com/gorilla/mux"  
     
@@ -59,9 +60,9 @@ func removeArticle(w http.ResponseWriter, r *http.Request) {
 
 func createUser(ctx context.Context, client *auth.Client) *auth.UserRecord {
     params := (&auth.UserToCreate{}).
-        Email("user@example.com").
+        Email("user2@example.com").
         EmailVerified(false).
-        PhoneNumber("+15555550100").
+        PhoneNumber("+15555550101").
         Password("secretPassword").
         DisplayName("John Doe").
         PhotoURL("http://www.example.com/12345678/photo.png").
@@ -75,21 +76,31 @@ func createUser(ctx context.Context, client *auth.Client) *auth.UserRecord {
     return u
 }
 
+func InitializeFireBase(ctx context.Context)(*firebase.App, error){
+    opt := option.WithCredentialsFile("my-potate-dev-firebase-adminsdk-6rbsw-233fe7362e.json")
+    app, err := firebase.NewApp(ctx, nil, opt)
+    if err != nil {
+        return nil, err
+    }
 
+    return app, nil
 
+}
+func hello(w http.ResponseWriter, r *http.Request) {
+    w.Write([]byte("hello!"))
+}
 
 
 func main() {
 
+
     // test for firebase
     // initialize
-    opt := option.WithCredentialsFile("path/to/credential.json")
-    ctx := context.Background()
-    app, err := firebase.NewApp(ctx, nil, opt)
-    if err != nil {
-        fmt.Println("error initializing app: %v", err)
-        return
-    }
+    // ctx := context.Background()
+    // app, err := InitializeFireBase(ctx)
+    // if err != nil{
+    //     log.Fatalln(err)
+    // }
 
     // firestore example
     // client, err := app.Firestore(ctx)
@@ -120,13 +131,27 @@ func main() {
     // }
 
     // auth example
-    client, err := app.Auth(ctx)
-    if err != nil {
-        log.Fatalf("error getting Auth client: %v\n", err)
-    }
+    // client, err := app.Auth(ctx)
+    // if err != nil {
+    //     log.Fatalf("error getting Auth client: %v\n", err)
+    // }
+    // createUser(ctx, client)
 
-    createUser(ctx, client)
 
+    // http example
+    http.HandleFunc("/hello", hello)
+    http.HandleFunc("/weather/", func(w http.ResponseWriter, r *http.Request){
+        city := strings.SplitN(r.URL.Path, "/", 3)[2]
+
+        data, err := query(city)
+        if err != nil{
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+        }
+
+        w.Header().Set("Content-Type", "application/json; charset=utf-8")
+        json.NewEncoder(w).Encode(data)
+    })
 
     // gorilla example(REST like return)
     // r := mux.NewRouter()
@@ -149,9 +174,32 @@ func main() {
 
 
     // http.Handle("/", r)
-    // http.ListenAndServe(":3000", nil)
+    http.ListenAndServe(":3000", nil)
 
 }
 
 
 
+func query(city string) (weatherData, error) {
+    resp, err := http.Get("http://api.openweathermap.org/data/2.5/weather?q=" + city)
+    if err != nil {
+        return weatherData{}, err
+    }
+ 
+    defer resp.Body.Close()
+ 
+    var d weatherData
+ 
+    if err := json.NewDecoder(resp.Body).Decode(&d); err != nil {
+        return weatherData{}, err
+    }
+ 
+    return d, nil
+}
+
+type weatherData struct {
+    Name string `json:"name"`
+    Main struct {
+        Kelvin float64 `json:"temp"`
+    } `json:"main"`
+}
